@@ -1,6 +1,8 @@
+#Variables
 books = []
 stay = True
 
+#Main book class
 class Book:
     bookID = 0
     def __init__(self, title, author, length, target_date):
@@ -25,36 +27,31 @@ class Book:
     def getBookName(self):
         return(f"{self.title} by {self.author}")
 
-def exitchecker(answer):
-    typed = input(answer)
-    if typed == "exit" or typed == 0:
-        stay = False
-        exit()
-    else:
-        return typed
+#exit checker should exit the application 
 
 
-
-
+#function for starting a new book
 def newBook():
-    books.append(Book(exitchecker("please enter a title: "), exitchecker("please enter the author's name: "), exitchecker("Please enter the number of pages: "), exitchecker("please enter the target date: ")))
+    books.append(Book(input("please enter a title: "), input("please enter the author's name: "), input("Please enter the number of pages: "), input("please enter the target date: ")))
 
+#function for listing all books with full info
 def listAllBooks():
     for x in books:
         print(x)
 
+#lists only the titles and author, used for making a list of books to choose from
 def listTitles():
     print("Please choose a title:")
     for count, value in enumerate(books):
         print(f"{count + 1}. {value.getBookName()}")
 
 
-
+#main menu
 def mainMenu():
     choice = 0
     while stay:
         try:
-            choice = int(exitchecker("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n"))
+            choice = int(input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n"))
         except:
             print("\n\n!Please enter a number between 1 and 3!")
 
@@ -64,6 +61,8 @@ def mainMenu():
             listTitles()
         elif choice == 3:
             pass
+        elif choice == 0:
+            break
 
 
 mainMenu()
