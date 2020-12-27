@@ -65,8 +65,8 @@ def mainMenu():
             pass
         elif choice == 0:
             break
+        elif choice == 'exit':
+            break
 
 
-# mainMenu()
-print(load())
-save({'bob':7})
+mainMenu()
