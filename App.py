@@ -1,3 +1,5 @@
+from fileHandler import *
+
 #Variables
 books = []
 stay = True
@@ -65,4 +67,6 @@ def mainMenu():
             break
 
 
-mainMenu()
+# mainMenu()
+print(load())
+save({'bob':7})
