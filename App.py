@@ -2,7 +2,6 @@ from fileHandler import *
 
 #Variables
 books = []
-stay = True
 
 #Main book class
 class Book:
@@ -50,23 +49,23 @@ def listTitles():
 
 #main menu
 def mainMenu():
+    stay = True
     choice = 0
     while stay:
         try:
-            choice = int(input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n"))
+            choice = input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n")
+            choice = int(choice)
+            if choice == 1:
+                newBook()
+            elif choice == 2:
+                listTitles()
+            elif choice == 3:
+                pass
+            if choice == 0:
+                stay = False
         except:
+            if choice =='exit':
+                break
             print("\n\n!Please enter a number between 1 and 3!")
-
-        if choice == 1:
-            newBook()
-        elif choice == 2:
-            listTitles()
-        elif choice == 3:
-            pass
-        elif choice == 0:
-            break
-        elif choice == 'exit':
-            break
-
 
 mainMenu()
