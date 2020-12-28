@@ -1,7 +1,23 @@
+#file handler
+# import json
+
+# def load():
+#     fh = open("data.json","r")
+#     return fh.read()
+#     fh.close()
+
+# def save(arg):
+#     fh = open("data.json","w")
+#     fh.write(json.dumps(arg))
+#     fh.close
+
 from fileHandler import *
 
 #Variables
+# books = load()
 books = []
+
+
 
 #Main book class
 class Book:
@@ -29,11 +45,12 @@ class Book:
         return(f"{self.title} by {self.author}")
 
 #exit checker should exit the application 
-
+#removed for now
 
 #function for starting a new book
 def newBook():
-    books.append(Book(input("please enter a title: "), input("please enter the author's name: "), input("Please enter the number of pages: "), input("please enter the target date: ")))
+    books.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
+    save_object(books)
 
 #function for listing all books with full info
 def listAllBooks():
@@ -50,7 +67,7 @@ def listTitles():
 #main menu
 def mainMenu():
     stay = True
-    choice = 0
+    choice = int(0)
     while stay:
         try:
             choice = input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n")
@@ -61,7 +78,7 @@ def mainMenu():
                 listTitles()
             elif choice == 3:
                 pass
-            if choice == 0:
+            elif choice == 0:
                 stay = False
         except:
             if choice =='exit':
