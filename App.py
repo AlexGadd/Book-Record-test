@@ -60,27 +60,30 @@ def listTitles():
         print(f"{count + 1}. {currentBook}")
 
 def addPosition():
-    while True:
+    enteredPosition = False
+    while not enteredPosition:
             print("Please choose a title:")
             listTitles()
             selection = 0
             try:
                 selection = int(input())
-                if selection <= (len(books)-1):
-                    print("this works")
+                print(selection)
+                if selection <= len(books):
                     selection = selection -1
                     thisBook = books[selection]
                     while True:
-                        pageNum = input("What page are you currently on?")
-                        if pageNum < thisBook["length"] and pageNum < 0:
-                            thisBook["position"] = pageNum
+                        pageNum = int(input("What page are you currently on?\n"))
+                        if pageNum < thisBook["length"] and pageNum > 0:
+                            books[selection]["position"] = pageNum
                             save(books)
+                            enteredPosition = True
                             break
-                        elif pageNum == thisBook["position"]:
+                        elif pageNum == thisBook["length"]:
                             print("Congratulations, you've finished!")
                             thisBook["position"] = pageNum
                             thisBook["current"] = False
                             save(books)
+                            enteredPosition = True
                             break
                         else:
                             print("Please enter a valid page number")
@@ -89,7 +92,7 @@ def addPosition():
                     print("Please enter a number corresponding with the books on the list")
             except:
                 print("Please enter a number")
-
+            
 
 
 
