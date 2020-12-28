@@ -51,6 +51,7 @@ class Book:
 def newBook():
     books.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
     save(books)
+    print(books[0].__dict__)
 
 #function for listing all books with full info
 def listAllBooks():
