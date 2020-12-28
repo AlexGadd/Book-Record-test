@@ -50,7 +50,7 @@ class Book:
 #function for starting a new book
 def newBook():
     books.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
-    save_object(books)
+    save(books)
 
 #function for listing all books with full info
 def listAllBooks():
