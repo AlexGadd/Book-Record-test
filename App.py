@@ -1,27 +1,19 @@
-#file handler
-# import json
-
-# def load():
-#     fh = open("data.json","r")
-#     return fh.read()
-#     fh.close()
-
-# def save(arg):
-#     fh = open("data.json","w")
-#     fh.write(json.dumps(arg))
-#     fh.close
-
 from fileHandler import *
+import os
+
+if not "Book Record test" in os.getcwd():
+    os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
 
 #Variables
-# books = load()
-books = []
+books = load()
+print(books)
+objBooks = []
 
 
 
 #Main book class
 class Book:
-    bookID = 0
+    bookID = len(books)
     def __init__(self, title, author, length, target_date):
         self.bookID = Book.bookID
         self.title = title
@@ -49,9 +41,11 @@ class Book:
 
 #function for starting a new book
 def newBook():
-    books.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
+    objBooks.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
+    print(objBooks[len(objBooks)-1].__dict__)
+    books.append(objBooks[len(objBooks)-1].__dict__)
+    print(books)
     save(books)
-    print(books[0].__dict__)
 
 #function for listing all books with full info
 def listAllBooks():
@@ -62,7 +56,8 @@ def listAllBooks():
 def listTitles():
     print("Please choose a title:")
     for count, value in enumerate(books):
-        print(f"{count + 1}. {value.getBookName()}")
+        currentBook = f"{value['title']} by {value['author']}"
+        print(f"{count + 1}. {currentBook}")
 
 
 #main menu

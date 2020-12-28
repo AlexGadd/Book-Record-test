@@ -1,13 +1,14 @@
-import pickle
+import json
 
 file_name = "data.json"
 
 def load():
-    open_file = open(file_name,"r").read
-    return open_file
-    open_file.close()
+    fh = open(file_name,"r")
+    data = json.load(fh)
+    return data
+    fh.close()
 
 def save(arg):
-    open_file = open(file_name,"w")
-    open_file.dump(arg)
-    open_file.close
+    fh = open(file_name,"w")
+    json.dump(arg,fh)
+    fh.close
