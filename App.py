@@ -9,8 +9,7 @@ if not "Book Record test" in os.getcwd():
     os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
 
 # Variables
-books = load_all()
-objBooks = []
+
 
 
 # exit checker should exit the application
