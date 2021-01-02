@@ -43,9 +43,7 @@ class Book:
 #function for starting a new book
 def new_book():
     objBooks.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
-    print(objBooks[len(objBooks)-1].__dict__)
     books.append(objBooks[len(objBooks)-1].__dict__)
-    print(books)
     save(books)
 
 #function for listing all books with full info
@@ -115,7 +113,11 @@ def mainMenu():
     while stay:
         choice = int(0)
         try:
-            choice = input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n")
+            print("\nWould you like to: ")
+            print("1. Start a new book")
+            print("2.Add a new page position to a book you're reading")
+            print("3.View stats on a previously read book?")
+            choice = input()
             choice = int(choice)
             if choice == 1:
                 new_book()
