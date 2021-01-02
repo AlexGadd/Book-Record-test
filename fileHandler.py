@@ -7,24 +7,29 @@ def load_all():
     conn = sqlite3.connect(file_name)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='book_list'")
-    print(cursor.fetchall())
     if not cursor.fetchall():
         create_book_list()
     cursor.execute("SELECT rowid, * FROM book_list")
-    return cursor.fetchall()
+    result = cursor.fetchall()
     conn.close()
+    return result
 
 
 def load_current():
     conn = sqlite3.connect(file_name)
     cursor = conn.cursor()
     cursor.execute("SELECT rowid, * FROM book_list WHERE current='True'")
-    return cursor.fetchall()
+    result = cursor.fetchall()
     conn.close()
+    return result
 
 
-def save(arg):
-    pass
+def save(record):
+    conn = sqlite3.connect(file_name)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO book_list VALUES (?,?,?,?,?,?)", record)
+    conn.commit()
+    conn.close()
 
 
 def create_book_list():
@@ -43,4 +48,17 @@ def create_book_list():
     conn.close()
 
 
-load_all()
+def add_new_position(rowid, page):
+    conn = sqlite3.connect(file_name)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE book_list SET position=(?) WHERE rowid=(?)", (page, rowid))
+    conn.commit()
+    conn.close()
+
+
+def change_to_complete(rowid):
+    conn = sqlite3.connect(file_name)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE book_list SET current='False' WHERE rowid=(?)", (rowid,))
+    conn.commit()
+    conn.close()

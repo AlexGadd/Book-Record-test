@@ -1,112 +1,94 @@
-#this handles saving and loading of files
+# this handles saving and loading of files
 from fileHandler import *
 import os
+import time
+import datetime
 
-#temporary fix for files being saved in wrong place
+# temporary fix for files being saved in wrong place
 if not "Book Record test" in os.getcwd():
     os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
 
-#Variables
-books = load()
+# Variables
+books = load_all()
 objBooks = []
 
 
-#Main book class
-class Book:
-    bookID = len(books)
-    
-    def __init__(self, title, author, length, target_date):
-        self.bookID = Book.bookID
-        self.title = title
-        self.author = author
-        self.length = length
-        self.target_date = target_date
-        self.current = True
-        self.position = 0
-        Book.bookID += 1
-
-    def get_id_num(self):
-        return str(self.bookID).zfill(4)
-
-    def __lt__(self, other):
-        return self.bookID < other.bookID
-
-    def __str__(self):
-        return(f"Title: {self.title}\nAuthor: {self.author}\nNumber of pages: {self.length}\nTarget finish date: {self.target_date}\nCurrently Reading? {'Yes' if self.current else 'No'}")
-
-    def get_book_name(self):
-        return(f"{self.title} by {self.author}")
-
-#exit checker should exit the application
+# exit checker should exit the application
 ##removed for now##
 
-#function for starting a new book
+# function for starting a new book
 def new_book():
-    objBooks.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
-    books.append(objBooks[len(objBooks)-1].__dict__)
-    save(books)
+    book = []
+    book.append(input("please enter a title: "))
+    book.append(input("please enter the author's name: "))
+    book.append(int(input("Please enter the number of pages: ")))
+    print("Please enter the target date")
+    year = int(input('Enter a year'))
+    month = int(input('Enter a month'))
+    day = int(input('Enter a day'))
+    date = f"{day}/{month}/{year}"
+    date = datetime.datetime.strptime(date, "%d/%m/%Y")
+    date = date.timetuple()
+    date = time.mktime(date)
+    book.append(int(date))
+    book.append(str(True))
+    book.append(0)
+    book = tuple(map(str, book))
+    save(book)
 
-#function for listing all books with full info
+
+# function for listing all books with full info
 def list_all_books():
-    for x in books:
-        print(x)
+    current = load_all()
+    for count, value in enumerate(current):
+        current_book = f"{value[1]} by {value[2]}"
+        print(f"{count + 1}. {current_book}")
 
-#function for listing all current books
-def list_current_books():
-    filtered_list = [item for item in books if item.get('current') == True]
-    if filtered_list:
-        return filtered_list
-    else:
-        print("You don't have any books that you're currently")
 
-#lists only the titles and author, used for making a list of books to choose from
-def list_titles():
-    for count, value in enumerate(books):
-        currentBook = f"{value['title']} by {value['author']}"
-        print(f"{count + 1}. {currentBook}")
+# lists only the titles and author, used for making a list of books to choose from
+def list_current_titles():
+    current = load_current()
+    for count, value in enumerate(current):
+        current_book = f"{value[1]} by {value[2]}"
+        print(f"{count + 1}. {current_book}")
+
 
 def add_position():
-    enteredPosition = False
-    while not enteredPosition:
-            print("Please choose a title:")
-            list_titles()
-            selection = 0
-            try:
-                selection = int(input())
-                print(selection)
-                if selection <= len(books):
-                    selection = selection -1
-                    thisBook = books[selection]
-                    while True:
-                        pageNum = int(input("What page are you currently on?\n"))
-                        if pageNum < thisBook["length"] and pageNum > 0:
-                            books[selection]["position"] = pageNum
-                            save(books)
-                            enteredPosition = True
-                            break
-                        elif pageNum == thisBook["length"]:
-                            print("Congratulations, you've finished!")
-                            thisBook["position"] = pageNum
-                            thisBook["current"] = False
-                            save(books)
-                            enteredPosition = True
-                            break
-                        else:
-                            print("Please enter a valid page number")
-                    break
-                else:
-                    print("Please enter a number corresponding with the books on the list")
-            except:
-                print("Please enter a number")
+    current_books = load_current()
+    entered_position = False
+    while not entered_position:
+        print("Please choose a title:")
+        list_current_titles()
+        selection = 0
+        try:
+            selection = int(input())
+            print(selection)
+            if selection <= len(current_books):
+                selection = selection - 1
+                this_book = current_books[selection]
+                while True:
+                    page_num = int(input("What page are you currently on?\n"))
+                    if page_num < this_book[4] and page_num > 0:
+                        rowid = str(current_books[selection][0])
+                        add_new_position(rowid,page_num)
+                        entered_position = True
+                        break
+                    elif page_num == this_book["length"]:
+                        print("Congratulations, you've finished!")
+                        rowid = str(current_books[selection][0])
+                        change_to_complete(rowid)
+                        entered_position = True
+                        break
+                    else:
+                        print("Please enter a valid page number")
+                break
+            else:
+                print("Please enter a number corresponding with the books on the list")
+        except:
+            print("Please enter a number")
 
 
-
-
-
-
-
-
-#main menu
+# main menu
 def mainMenu():
     stay = True
     choice = int(0)
@@ -128,8 +110,9 @@ def mainMenu():
             elif choice == 0:
                 stay = False
         except:
-            if choice =='exit':
+            if choice == 'exit':
                 break
             print("\n\n!Please enter a number between 1 and 3!")
+
 
 mainMenu()
