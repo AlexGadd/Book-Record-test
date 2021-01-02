@@ -11,10 +11,10 @@ books = load()
 objBooks = []
 
 
-
 #Main book class
 class Book:
     bookID = len(books)
+    
     def __init__(self, title, author, length, target_date):
         self.bookID = Book.bookID
         self.title = title
@@ -23,25 +23,25 @@ class Book:
         self.target_date = target_date
         self.current = True
         self.position = 0
-        Book.bookID +=1
+        Book.bookID += 1
 
-    def getIdNum(self):
+    def get_id_num(self):
         return str(self.bookID).zfill(4)
-    
+
     def __lt__(self, other):
         return self.bookID < other.bookID
 
     def __str__(self):
         return(f"Title: {self.title}\nAuthor: {self.author}\nNumber of pages: {self.length}\nTarget finish date: {self.target_date}\nCurrently Reading? {'Yes' if self.current else 'No'}")
 
-    def getBookName(self):
+    def get_book_name(self):
         return(f"{self.title} by {self.author}")
 
-#exit checker should exit the application 
+#exit checker should exit the application
 ##removed for now##
 
 #function for starting a new book
-def newBook():
+def new_book():
     objBooks.append(Book(input("please enter a title: "), input("please enter the author's name: "), int(input("Please enter the number of pages: ")), input("please enter the target date: ")))
     print(objBooks[len(objBooks)-1].__dict__)
     books.append(objBooks[len(objBooks)-1].__dict__)
@@ -49,21 +49,29 @@ def newBook():
     save(books)
 
 #function for listing all books with full info
-def listAllBooks():
+def list_all_books():
     for x in books:
         print(x)
 
+#function for listing all current books
+def list_current_books():
+    filtered_list = [item for item in books if item.get('current') == True]
+    if filtered_list:
+        return filtered_list
+    else:
+        print("You don't have any books that you're currently")
+
 #lists only the titles and author, used for making a list of books to choose from
-def listTitles():
+def list_titles():
     for count, value in enumerate(books):
         currentBook = f"{value['title']} by {value['author']}"
         print(f"{count + 1}. {currentBook}")
 
-def addPosition():
+def add_position():
     enteredPosition = False
     while not enteredPosition:
             print("Please choose a title:")
-            listTitles()
+            list_titles()
             selection = 0
             try:
                 selection = int(input())
@@ -92,11 +100,11 @@ def addPosition():
                     print("Please enter a number corresponding with the books on the list")
             except:
                 print("Please enter a number")
-            
 
 
 
-                
+
+
 
 
 
@@ -110,9 +118,9 @@ def mainMenu():
             choice = input("\nWould you like to: \n1. Start a new book\n2.Add a new page position to a book you're reading\n3.View stats on a previously read book?\n")
             choice = int(choice)
             if choice == 1:
-                newBook()
+                new_book()
             elif choice == 2:
-                addPosition()
+                add_position()
             elif choice == 3:
                 pass
             elif choice == 0:
