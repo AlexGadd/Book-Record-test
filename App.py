@@ -4,16 +4,40 @@ import os
 import time
 import datetime
 
-# temporary fix for files being saved in wrong place
-if not "Book Record test" in os.getcwd():
-    os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
 
-# Variables
-
+# # temporary fix for files being saved in wrong place
+# if not "Book Record test" in os.getcwd():
+#     os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
 
 
-# exit checker should exit the application
-##removed for now##
+# functions used within other functions
+
+# takes input from a list of books and prints a list to choose from
+def list_books(book_list):
+    for count, value in enumerate(book_list):
+        current_book = f"{value[1]} by {value[2]}"
+        print(f"{count + 1}. {current_book}")
+
+
+# function for listing all books with full info
+def list_all_books():
+    current = load_all()
+    list_books(current)
+
+
+# lists only the titles and author, used for making a list of books to choose from
+def list_current_titles():
+    current = load_current()
+    list_books(current)
+
+
+# lists all finished books
+def list_finished():
+    current = load_finished()
+    list_books(current)
+
+
+# Overarching functions for parts of the main menu
 
 # function for starting a new book
 def new_book():
@@ -36,22 +60,6 @@ def new_book():
     save(book)
 
 
-# function for listing all books with full info
-def list_all_books():
-    current = load_all()
-    for count, value in enumerate(current):
-        current_book = f"{value[1]} by {value[2]}"
-        print(f"{count + 1}. {current_book}")
-
-
-# lists only the titles and author, used for making a list of books to choose from
-def list_current_titles():
-    current = load_current()
-    for count, value in enumerate(current):
-        current_book = f"{value[1]} by {value[2]}"
-        print(f"{count + 1}. {current_book}")
-
-
 def add_position():
     current_books = load_current()
     entered_position = False
@@ -61,15 +69,14 @@ def add_position():
         selection = 0
         try:
             selection = int(input())
-            print(selection)
-            if selection <= len(current_books):
+            if len(current_books) >= selection > 0:
                 selection = selection - 1
                 this_book = current_books[selection]
                 while True:
                     page_num = int(input("What page are you currently on?\n"))
-                    if page_num < this_book[4] and page_num > 0:
+                    if this_book[4] > page_num > 0:
                         rowid = str(current_books[selection][0])
-                        add_new_position(rowid,page_num)
+                        add_new_position(rowid, page_num)
                         entered_position = True
                         break
                     elif page_num == this_book["length"]:
@@ -78,8 +85,12 @@ def add_position():
                         change_to_complete(rowid)
                         entered_position = True
                         break
+                    elif page_num == 0:
+                        break
                     else:
                         print("Please enter a valid page number")
+                break
+            elif selection == 0:
                 break
             else:
                 print("Please enter a number corresponding with the books on the list")
@@ -88,14 +99,14 @@ def add_position():
 
 
 # main menu
-def mainMenu():
+def main_menu():
     stay = True
     choice = int(0)
     while stay:
         choice = int(0)
         try:
             print("\nWould you like to: ")
-            print("1. Start a new book")
+            print("1.Start a new book")
             print("2.Add a new page position to a book you're reading")
             print("3.View stats on a previously read book?")
             choice = input()
@@ -114,4 +125,4 @@ def mainMenu():
             print("\n\n!Please enter a number between 1 and 3!")
 
 
-mainMenu()
+main_menu()

@@ -24,6 +24,15 @@ def load_current():
     return result
 
 
+def load_finished():
+    conn = sqlite3.connect(file_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT rowid, * FROM book_list WHERE current='False'")
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
+
 def save(record):
     conn = sqlite3.connect(file_name)
     cursor = conn.cursor()
