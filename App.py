@@ -1,21 +1,24 @@
 # this handles saving and loading of files
 from fileHandler import *
-import os
 import time
 import datetime
 
 
-# # temporary fix for files being saved in wrong place
-# if not "Book Record test" in os.getcwd():
-#     os.chdir("/Users/alex/Desktop/playground/Python/Book Record test")
-
-
-# functions used within other functions
-
+# Functions used within other functions
 # takes input from a list of books and prints a list to choose from
-def list_books(book_list):
+def list_books(book_list, arg=False):
     for count, value in enumerate(book_list):
-        current_book = f"{value[1]} by {value[2]}"
+        if arg:
+            length = value[3]
+            target_date = value[4]
+            position = value[6]
+            today = int(datetime.datetime.now().timestamp())
+            pages_left = length - position
+            days_left = int((target_date - today) / 86400)  # 86400 is the number of seconds in a day
+            pages_per_day = int(pages_left / days_left)
+            current_book = f'{value[1]} by {value[2]} -\t- read {pages_per_day} pages per day to meet target'
+        else:
+            current_book = f"{value[1]} by {value[2]}"
         print(f"{count + 1}. {current_book}")
 
 
@@ -26,9 +29,12 @@ def list_all_books():
 
 
 # lists only the titles and author, used for making a list of books to choose from
-def list_current_titles():
+def list_current_titles(arg=False):
     current = load_current()
-    list_books(current)
+    if arg:
+        list_books(current, arg)
+    else:
+        list_books(current)
 
 
 # lists all finished books
@@ -41,10 +47,11 @@ def list_finished():
 
 # function for starting a new book
 def new_book():
-    book = []
-    book.append(input("please enter a title: "))
-    book.append(input("please enter the author's name: "))
-    book.append(int(input("Please enter the number of pages: ")))
+    book = [
+        input("please enter a title: "),
+        input("please enter the author's name: "),
+        int(input("Please enter the number of pages: "))
+    ]
     print("Please enter the target date")
     year = int(input('Enter a year'))
     month = int(input('Enter a month'))
@@ -65,8 +72,8 @@ def add_position():
     entered_position = False
     while not entered_position:
         print("Please choose a title:")
-        list_current_titles()
-        selection = 0
+        list_current_titles(True)
+        selection = int(0)
         try:
             selection = int(input())
             if len(current_books) >= selection > 0:
