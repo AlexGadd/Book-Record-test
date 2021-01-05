@@ -6,9 +6,15 @@ import datetime
 
 # Functions used within other functions
 # takes input from a list of books and prints a list to choose from
-def list_books(book_list, arg=False):
-    for count, value in enumerate(book_list):
-        if arg:
+def list_books(book_list, add_page_count_target=False):
+    if not add_page_count_target:
+        # creates a readable and selectable list of books passed from the database query
+        for count, value in enumerate(book_list):
+            current_book = f"{value[1]} by {value[2]}"
+            print(f"{count + 1}. {current_book}")
+    else:
+        # adds page count target
+        for count, value in enumerate(book_list):
             length = value[3]
             target_date = value[4]
             position = value[6]
@@ -16,10 +22,8 @@ def list_books(book_list, arg=False):
             pages_left = length - position
             days_left = int((target_date - today) / 86400)  # 86400 is the number of seconds in a day
             pages_per_day = int(pages_left / days_left)
-            current_book = f'{value[1]} by {value[2]} -\t- read {pages_per_day} pages per day to meet target'
-        else:
-            current_book = f"{value[1]} by {value[2]}"
-        print(f"{count + 1}. {current_book}")
+            current_book = f'{value[1]} by {value[2]} -\t- read {pages_per_day} pages per day to meet your target'
+            print(f"{count + 1}. {current_book}")
 
 
 # function for listing all books with full info
@@ -29,10 +33,10 @@ def list_all_books():
 
 
 # lists only the titles and author, used for making a list of books to choose from
-def list_current_titles(arg=False):
+def list_current_titles(add_page_count_target=False):
     current = load_current()
-    if arg:
-        list_books(current, arg)
+    if add_page_count_target:
+        list_books(current, add_page_count_target)
     else:
         list_books(current)
 
@@ -51,7 +55,7 @@ def new_book():
         input("please enter a title: "),
         input("please enter the author's name: "),
         int(input("Please enter the number of pages: "))
-    ]
+            ]
     print("Please enter the target date")
     year = int(input('Enter a year'))
     month = int(input('Enter a month'))
